@@ -994,9 +994,9 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
                         ((StringLiteral) visit(context.comment().string())).getStringValue(),
                 null,
                 context.orderByDesc() == null ? null :
-                        visit(context.orderByDesc().identifierList().identifier(), Identifier.class)
-                                .stream().map(Identifier::getValue).collect(toList())
-        );
+                    visit(context.orderByDesc().identifierList().identifier(), Identifier.class)
+                        .stream().map(Identifier::getValue).collect(toList())
+                );
 
         List<Identifier> columns = visitIfPresent(context.identifier(), Identifier.class);
         return new CreateTableAsSelectStmt(
@@ -3930,20 +3930,13 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
         return new AddPartitionClause(partitionDesc, distributionDesc, properties, temporary, createPos(context));
     }
 
-    //yl 解析sql后，将ast tree load到对象里面
     @Override
     public ParseNode visitDropPartitionClause(StarRocksParser.DropPartitionClauseContext context) {
+        String partitionName = ((Identifier) visit(context.identifier())).getValue();
         boolean temp = context.TEMPORARY() != null;
         boolean force = context.FORCE() != null;
         boolean exists = context.EXISTS() != null;
-        PartitionDesc partitionDesc;
-        if (context.multiRangePartition() != null) {
-            partitionDesc = (PartitionDesc) visitMultiRangePartition(context.multiRangePartition());
-            return new DropPartitionClause(exists, temp, force, createPos(context), partitionDesc);
-        }else{
-            String partitionName = ((Identifier) visit(context.identifier())).getValue();
-            return new DropPartitionClause(exists, partitionName, temp, force, createPos(context));
-        }
+        return new DropPartitionClause(exists, partitionName, temp, force, createPos(context));
     }
 
     @Override
@@ -6589,7 +6582,6 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
                 partitionKeyDesc, properties, createPos(context));
     }
 
-    // yl 将sql 中的片段提取出来，封装到对象属性中
     @Override
     public ParseNode visitMultiRangePartition(StarRocksParser.MultiRangePartitionContext context) {
         NodePosition pos = createPos(context);

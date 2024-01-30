@@ -560,7 +560,6 @@ public class AlterJobMgr {
             } else if (currentAlterOps.hasPartitionOp()) {
                 Preconditions.checkState(alterClauses.size() == 1);
                 AlterClause alterClause = alterClauses.get(0);
-                // judge alter partition clause yanglei
                 if (alterClause instanceof DropPartitionClause) {
                     DropPartitionClause dropPartitionClause = (DropPartitionClause) alterClause;
                     if (!dropPartitionClause.isTempPartition()) {
@@ -630,7 +629,6 @@ public class AlterJobMgr {
                 if (!((AddPartitionClause) alterClause).isTempPartition()) {
                     DynamicPartitionUtil.checkAlterAllowed((OlapTable) db.getTable(tableName));
                 }
-                // yl add partitions
                 GlobalStateMgr.getCurrentState().getLocalMetastore()
                         .addPartitions(db, tableName, (AddPartitionClause) alterClause);
             } else if (alterClause instanceof TruncatePartitionClause) {

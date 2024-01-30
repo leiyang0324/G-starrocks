@@ -249,7 +249,7 @@ public interface ConnectorMetadata {
             throws DdlException, AnalysisException {
     }
 
-    default void dropPartition(Database db, Table table, DropPartitionClause clause) throws DdlException, AnalysisException {
+    default void dropPartition(Database db, Table table, DropPartitionClause clause) throws DdlException {
     }
 
     default void renamePartition(Database db, Table table, PartitionRenameClause renameClause) throws DdlException {

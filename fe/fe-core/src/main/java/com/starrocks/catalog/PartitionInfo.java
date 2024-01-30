@@ -60,7 +60,6 @@ import javax.validation.constraints.NotNull;
 /*
  * Repository of a partition's related infos
  */
-//partition
 public class PartitionInfo implements Cloneable, Writable, GsonPreProcessable, GsonPostProcessable {
     private static final Logger LOG = LogManager.getLogger(PartitionInfo.class);
 
