@@ -23,10 +23,11 @@ import java.util.Map;
 // clause which is used to add one column to
 public class DropPartitionClause extends AlterTableClause {
     private final boolean ifExists;
-    private final String partitionName;
+    private String partitionName;
     // true if this is to drop a temp partition
     private final boolean isTempPartition;
     private final boolean forceDrop;
+    private PartitionDesc partitionDesc;
 
     public DropPartitionClause(boolean ifExists, String partitionName, boolean isTempPartition, boolean forceDrop) {
         this(ifExists, partitionName, isTempPartition, forceDrop, NodePosition.ZERO);
@@ -42,12 +43,31 @@ public class DropPartitionClause extends AlterTableClause {
         this.forceDrop = forceDrop;
     }
 
+    public DropPartitionClause(boolean ifExists, boolean isTempPartition,
+                               boolean forceDrop, NodePosition pos, PartitionDesc partitionDesc) {
+        super(AlterOpType.DROP_PARTITION, pos);
+        this.ifExists = ifExists;
+        this.isTempPartition = isTempPartition;
+        this.needTableStable = false;
+        this.forceDrop = forceDrop;
+        this.partitionDesc = partitionDesc;
+
+    }
+
+    public boolean hasMultiPartitions() {
+        return partitionDesc != null;
+    }
+
     public boolean isSetIfExists() {
         return ifExists;
     }
 
     public String getPartitionName() {
         return partitionName;
+    }
+
+    public PartitionDesc getPartitionDesc() {
+        return partitionDesc;
     }
 
     public boolean isTempPartition() {
