@@ -65,6 +65,14 @@ public class MultiRangePartitionDesc extends PartitionDesc {
         this.timeUnit = timeUnit;
     }
 
+    public String getPartitionBegin() {
+        return partitionBegin;
+    }
+
+    public String getPartitionEnd() {
+        return partitionEnd;
+    }
+
     public Long getStep() {
         return step;
     }

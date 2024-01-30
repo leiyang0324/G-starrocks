@@ -1083,6 +1083,7 @@ addPartitionClause
 
 dropPartitionClause
     : DROP TEMPORARY? PARTITION (IF EXISTS)? identifier FORCE?
+    | DROP TEMPORARY? PARTITIONS (IF EXISTS)? rangePartitionDesc FORCE?
     ;
 
 truncatePartitionClause
